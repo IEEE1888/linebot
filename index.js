@@ -43,7 +43,27 @@ function handleEvent(event) {
   else if(event.type == 'message'){
     console.log(event)
     if(event.message.type=='text' && event.message.text=="テスト"){
-	const echo ={ type: 'text', text: "路面"};
+	//const echo ={ type: 'text', text: "路面"};
+	const echo ={
+	    "type": "template",
+	    "altText": "this is a confirm template",
+	    "template": {
+		"type": "confirm",
+		"text": "写真はありますか？",
+		"actions": [
+		    {
+			"type": "message",
+			"label": "Yes",
+			"text": "photoyes"
+		    },
+		    {
+			"type": "message",
+			"label": "No",
+			"text": "photono"
+		    }
+		]
+	    }
+	}
 	return client.replyMessage(event.replyToken, echo);
     }
   }
