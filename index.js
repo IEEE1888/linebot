@@ -40,6 +40,13 @@ function handleEvent(event) {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
+  else if(event.type == 'message'){
+    console.log(event)
+    if(event.message.type=='text' && event.message.text=="テスト"){
+	const echo ={ type: 'text', text: "路面"};
+	return client.replyMessage(event.replyToken, echo);
+    }
+  }
 
   // create a echoing text message
   const echo = { type: 'text', text: event.message.text };
@@ -49,7 +56,7 @@ function handleEvent(event) {
 }
 
 // listen on port
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
