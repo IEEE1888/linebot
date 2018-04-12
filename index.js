@@ -16,6 +16,12 @@ const client = new line.Client(config);
 // about Express itself: https://expressjs.com/
 const app = express();
 
+app.get('/', function (req, res) {
+  res.send('Hello World!');
+});
+app.get('/test', function (req, res) {
+  res.send('Hello World!test');
+});
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post('/callback', line.middleware(config), (req, res) => {
