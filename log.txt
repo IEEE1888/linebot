@@ -1,0 +1,10 @@
+
+> echo-bot@0.0.0 start /linebot
+> node .
+
+listening on 80
+{ type: 'message',
+  replyToken: '7252a62cdc7748068d6ce83cf61c1a21',
+  source: { userId: 'U9a0cdcd9164a05b25b4aabd9e53c0fea', type: 'user' },
+  timestamp: 1523512173272,
+  message: { type: 'image', id: '7781134852081' } }

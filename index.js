@@ -7,6 +7,7 @@ const express = require('express');
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET,
+
 };
 
 // create LINE SDK client
@@ -36,11 +37,8 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 function handleEvent(event) {
-  if (event.type !== 'message' || event.message.type !== 'text') {
-    // ignore non-text-message event
-    return Promise.resolve(null);
-  }
-  else if(event.type == 'message'){
+
+  if(event.type == 'message'){
     console.log(event)
     if(event.message.type=='text' && event.message.text=="テスト"){
 	//const echo ={ type: 'text', text: "路面"};
@@ -65,10 +63,16 @@ function handleEvent(event) {
 	    }
 	}
 	return client.replyMessage(event.replyToken, echo);
+    }else if(evnet.message.type=='image'){
+	var echo = { type: 'text', text: "画像を受け付けました" };
+	return client.replyMessage(event.replyToken, echo);
     }
+  }else{
+      console.log(event);
+      const echo = { type: 'text', text: "解析中" };
+      return client.replyMEssage(event.replyToken,echo);
   }
-
-  // create a echoing text message
+ // create a echoing text message
   const echo = { type: 'text', text: event.message.text };
 
   // use reply API
