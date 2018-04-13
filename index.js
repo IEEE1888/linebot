@@ -63,7 +63,8 @@ function handleEvent(event) {
 	    }
 	}
 	return client.replyMessage(event.replyToken, echo);
-    }else if(evnet.message.type=='image'){
+    }else if(event.message.type=='image'){
+	console.log(event)
 	var echo = { type: 'text', text: "画像を受け付けました" };
 	return client.replyMessage(event.replyToken, echo);
     }
@@ -73,7 +74,7 @@ function handleEvent(event) {
       return client.replyMEssage(event.replyToken,echo);
   }
  // create a echoing text message
-  const echo = { type: 'text', text: event.message.text };
+  var echo = { type: 'text', text: event.message.text };
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);
