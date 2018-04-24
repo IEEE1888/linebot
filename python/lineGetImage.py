@@ -6,7 +6,7 @@ from StringIO import StringIO
 import shutil
 
 #param
-#mid(messageid),filenumber,
+#mid(messageid),filenumber,dir
 #
 
 # image download
@@ -63,7 +63,7 @@ def test():
     #print header
     #print url
     resp=download_image(url,header)
-    save_image(make_filename("image",args[2],"a.jpg"),resp)
+    save_image(make_filename(args[3],args[2],"a.jpg"),resp)
 
 if __name__ == '__main__':
     test()

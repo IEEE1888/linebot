@@ -39,7 +39,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
 function handleEvent(event) {
 
   if(event.type == 'message'){
-    console.log(event)
+//    console.log(event)
     if(event.message.type=='text' && event.message.text=="テスト"){
 	//const echo ={ type: 'text', text: "路面"};
 	const echo ={
@@ -66,6 +66,19 @@ function handleEvent(event) {
     }else if(event.message.type=='image'){
 	console.log(event)
 	var echo = { type: 'text', text: "画像を受け付けました" };
+	//ファイル取得
+	var messageid=event.message.id
+	var num=1
+	var txt=`python python/lineGetImage.py ${messageid} ${num} python/image`
+
+	console.log(txt)
+	const exec = require('child_process').exec;
+	/*
+	exec('python python/lineGetImage.py xx xx', (err, stdout, stderr) => {
+	    if (err) { console.log(err); }
+	    console.log(stdout);
+	});
+	*/
 	return client.replyMessage(event.replyToken, echo);
     }
   }else{
