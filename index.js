@@ -1,5 +1,5 @@
 'use strict';
-
+const fs = require('fs');
 const line = require('@line/bot-sdk');
 const express = require('express');
 
@@ -119,8 +119,9 @@ app.post('/upimage', (req, res) => {
 	req.rawBody = Buffer.concat(buffers);
 	//書き込み
 	fs.writeFile('local/1.jpg', req.rawBody, 'utf-8',(err) => {
-	    if(err) return;
+	    if(err) res.send('failure');
 	    console.log(`[done] Image save`);
+	    res.send('success');
 	});
     });
 });
