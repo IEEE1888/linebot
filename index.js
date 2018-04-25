@@ -17,6 +17,21 @@ const client = new line.Client(config);
 // about Express itself: https://expressjs.com/
 const app = express();
 
+app.get('/api/delete', function(req,res){
+    console.log(req.query.num)
+    var txt=`rm python/image/${req.query.num}`
+
+    const exec = require('child_process').exec;
+
+    exec(txt, (err, stdout, stderr) =>{
+	 if (err) { console.log(err); }
+	    console.log(stdout);
+	});
+
+    res.send(`delete ${req.query.num}`)
+});
+app.use('/image', express.static('python/image'));
+
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
@@ -37,11 +52,8 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 function handleEvent(event) {
-
   if(event.type == 'message'){
-//    console.log(event)
     if(event.message.type=='text' && event.message.text=="テスト"){
-	//const echo ={ type: 'text', text: "路面"};
 	const echo ={
 	    "type": "template",
 	    "altText": "this is a confirm template",
@@ -73,12 +85,12 @@ function handleEvent(event) {
 
 	console.log(txt)
 	const exec = require('child_process').exec;
-	/*
-	exec('python python/lineGetImage.py xx xx', (err, stdout, stderr) => {
+
+	exec(txt, (err, stdout, stderr) => {
 	    if (err) { console.log(err); }
 	    console.log(stdout);
 	});
-	*/
+
 	return client.replyMessage(event.replyToken, echo);
     }
   }else{
@@ -86,11 +98,10 @@ function handleEvent(event) {
       const echo = { type: 'text', text: "解析中" };
       return client.replyMEssage(event.replyToken,echo);
   }
- // create a echoing text message
-  var echo = { type: 'text', text: event.message.text };
-
-  // use reply API
-  return client.replyMessage(event.replyToken, echo);
+    console.log("error mizissou")
+    var echo = { type: 'text', text: event.message.text };
+    // use reply API
+    return client.replyMessage(event.replyToken, echo);
 }
 
 // listen on port
