@@ -1,4 +1,4 @@
-:^q^qoding: utf-8
+#coding: utf-8
 import sys
 from pygeocoder import Geocoder
 import urllib
