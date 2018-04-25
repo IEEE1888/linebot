@@ -16,7 +16,7 @@ const client = new line.Client(config);
 // create Express app
 // about Express itself: https://expressjs.com/
 const app = express();
-
+var flag = false
 app.get('/api/delete', function(req,res){
     console.log(req.query.num)
     var txt=`rm python/image/${req.query.num}`
@@ -52,52 +52,59 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 function handleEvent(event) {
-  if(event.type == 'message'){
-    if(event.message.type=='text' && event.message.text=="テスト"){
-	const echo ={
-	    "type": "template",
-	    "altText": "this is a confirm template",
-	    "template": {
-		"type": "confirm",
-		"text": "写真はありますか？",
-		"actions": [
-		    {
-			"type": "message",
-			"label": "Yes",
-			"text": "photoyes"
-		    },
-		    {
-			"type": "message",
-			"label": "No",
-			"text": "photono"
-		    }
-		]
+    if(event.type == 'message'){
+	if(event.message.type=='text' && event.message.text=="テスト"){
+	    const echo ={
+		"type": "template",
+		"altText": "this is a confirm template",
+		"template": {
+		    "type": "confirm",
+		    "text": "写真はありますか？",
+		    "actions": [
+			{
+			    "type": "message",
+			    "label": "Yes",
+			    "text": "photoyes"
+			},
+			{
+			    "type": "message",
+			    "label": "No",
+			    "text": "photono"
+			}
+		    ]
+		}
 	    }
+	    return client.replyMessage(event.replyToken, echo);
+	}else if(event.message.type=='image'){
+	    console.log(event)
+	    var echo = { type: 'text', text: "画像受付完了、地点を登録してください" };
+	    //ファイル取得
+	    var messageid=event.message.id
+	    var num=1
+	    var txt=`python python/lineGetImage.py ${messageid} ${num} python/image`
+
+	    const exec = require('child_process').exec;
+
+	    exec(txt, (err, stdout, stderr) => {
+		if (err) { console.log(err); }
+		console.log(stdout);
+	    });
+	    flag=true
+
+	    return client.replyMessage(event.replyToken, echo);
+	}else if(event.message.type=='text' && flag==true){
+	    console.log("gps解析中")
+	    console.log(event)
+	    const echo = { type: 'text', text: "gpx解析中" };
+	    return client.replyMEssage(event.replyToken,echo);
 	}
-	return client.replyMessage(event.replyToken, echo);
-    }else if(event.message.type=='image'){
-	console.log(event)
-	var echo = { type: 'text', text: "画像を受け付けました" };
-	//ファイル取得
-	var messageid=event.message.id
-	var num=1
-	var txt=`python python/lineGetImage.py ${messageid} ${num} python/image`
 
-	console.log(txt)
-	const exec = require('child_process').exec;
 
-	exec(txt, (err, stdout, stderr) => {
-	    if (err) { console.log(err); }
-	    console.log(stdout);
-	});
-
-	return client.replyMessage(event.replyToken, echo);
+    }else{
+	console.log(event);
+	const echo = { type: 'text', text: "解析中" };
+	return client.replyMEssage(event.replyToken,echo);
     }
-  }else{
-      console.log(event);
-      const echo = { type: 'text', text: "解析中" };
-      return client.replyMEssage(event.replyToken,echo);
-  }
     console.log("error mizissou")
     var echo = { type: 'text', text: event.message.text };
     // use reply API
