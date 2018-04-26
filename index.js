@@ -64,12 +64,12 @@ function handleEvent(event) {
 			{
 			    "type": "message",
 			    "label": "Yes",
-			    "text": "photoyes"
+			    "text": "yes"
 			},
 			{
 			    "type": "message",
 			    "label": "No",
-			    "text": "photono"
+			    "text": "no"
 			}
 		    ]
 		}
@@ -93,16 +93,21 @@ function handleEvent(event) {
 
 	    return client.replyMessage(event.replyToken, echo);
 	}else if(event.message.type=='text' && flag==true){
+            flag=false
 	    console.log("gps解析中")
 	    console.log(event)
 	    const echo = { type: 'text', text: "gpx解析中" };
 	    return client.replyMessage(event.replyToken,echo);
-	}else if(event.message.type=='text' && event.message.text=='photoyes'){
+	}else if(event.message.type=='text' && event.message.text=='yes'){
 	    const echo = { type: 'text', text: "写真を送ってください" };
 	    return client.replyMessage(event.replyToken,echo);
-	}else if(event.message.type=='text' && event.message.text=='photono'){
+	}else if(event.message.type=='text' && event.message.text=='no'){
             const echo = { type: 'text', text: "場所を教えてください" };
 	    flag=true
+	    return client.replyMessage(event.replyToken,echo);
+	}else if(event.message.type=='location' && flag==true){
+	    console.log(event)
+	    const echo={ type: 'text', text: event.message.address+"を登録しました" };
 	    return client.replyMessage(event.replyToken,echo);
 	}
 
