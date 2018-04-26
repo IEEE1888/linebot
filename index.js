@@ -107,6 +107,9 @@ function handleEvent(event) {
 	    return client.replyMessage(event.replyToken,echo);
 	}else if(event.message.type=='location' && flag==true){
 	    console.log(event)
+	    fs.writeFile("local/loc.txt",event.message.latitude+":"+event.message.longitude, function (err) {
+		console.log(err);
+	    });
 	    const echo={ type: 'text', text: event.message.address+"を登録しました" };
 	    return client.replyMessage(event.replyToken,echo);
 	}
