@@ -3,6 +3,7 @@ import sys
 from pygeocoder import Geocoder
 import urllib
 import os
+from PIL import Image
 
 #args 場所（日本語）,ファイル名
 args=sys.argv
@@ -33,3 +34,5 @@ print html
 
 download_pic(html,args[2])
 
+#img= Image.open("./"+args[2]+".png")
+#img.save("./"+arg[2]+".jpg","

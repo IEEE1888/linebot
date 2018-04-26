@@ -31,7 +31,7 @@ app.get('/api/delete', function(req,res){
     res.send(`delete ${req.query.num}`)
 });
 app.use('/image', express.static('python/image'));
-
+app.use('/location',express.static('local/location'));
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
@@ -93,9 +93,21 @@ function handleEvent(event) {
 
 	    return client.replyMessage(event.replyToken, echo);
 	}else if(event.message.type=='text' && flag==true){
-            flag=false
-	    console.log("gps解析中")
+        //    flag=false
+
+	//    console.log("gps解析中")
 	    console.log(event)
+
+	    var message=event.message.text
+	    var txt=`python python/getGeo.py ${message} python/img`
+
+	    const exec = require('child_process').exec;
+
+	    exec(txt, (err, stdout, stderr) => {
+		if (err) { console.log(err); }
+		console.log(stdout);
+	    });
+
 	    const echo = { type: 'text', text: "gpx解析中" };
 	    return client.replyMessage(event.replyToken,echo);
 	}else if(event.message.type=='text' && event.message.text=='yes'){
@@ -107,7 +119,8 @@ function handleEvent(event) {
 	    return client.replyMessage(event.replyToken,echo);
 	}else if(event.message.type=='location' && flag==true){
 	    console.log(event)
-	    fs.writeFile("local/loc.txt",event.message.latitude+":"+event.message.longitude, function (err) {
+	    flag=false
+	    fs.writeFile("local/location/loc.txt",event.message.latitude+":"+event.message.longitude, function (err) {
 		console.log(err);
 	    });
 	    const echo={ type: 'text', text: event.message.address+"を登録しました" };
