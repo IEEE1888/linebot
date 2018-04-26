@@ -30,6 +30,7 @@ app.get('/api/delete', function(req,res){
 
     res.send(`delete ${req.query.num}`)
 });
+
 app.use('/image', express.static('python/image'));
 app.use('/location',express.static('local/location'));
 app.get('/', function (req, res) {
@@ -93,13 +94,13 @@ function handleEvent(event) {
 
 	    return client.replyMessage(event.replyToken, echo);
 	}else if(event.message.type=='text' && flag==true){
-        //    flag=false
+            flag=false
 
 	//    console.log("gps解析中")
 	    console.log(event)
 
 	    var message=event.message.text
-	    var txt=`python python/getGeo.py ${message} python/img`
+	    var txt=`python python/getGeo2.py ${message} local/location/loc.txt`
 
 	    const exec = require('child_process').exec;
 
@@ -108,7 +109,7 @@ function handleEvent(event) {
 		console.log(stdout);
 	    });
 
-	    const echo = { type: 'text', text: "gpx解析中" };
+	    const echo = { type: 'text', text: event.message.text+"で登録しました" };
 	    return client.replyMessage(event.replyToken,echo);
 	}else if(event.message.type=='text' && event.message.text=='yes'){
 	    const echo = { type: 'text', text: "写真を送ってください" };
