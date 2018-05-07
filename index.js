@@ -17,7 +17,7 @@ const client = new line.Client(config);
 // about Express itself: https://expressjs.com/
 const app = express();
 var flag = false
-app.get('/api/delete', function(req,res){
+app.get('/api/deleteI', function(req,res){
     console.log(req.query.num)
     var txt=`rm python/image/${req.query.num}`
 
@@ -30,6 +30,23 @@ app.get('/api/delete', function(req,res){
 
     res.send(`delete ${req.query.num}`)
 });
+
+app.get('/api/deleteL', function(req,res){
+    console.log(req.query.num)
+    var txt=`rm local/location/${req.query.num}`
+
+    const exec = require('child_process').exec;
+
+    exec(txt, (err, stdout, stderr) =>{
+	 if (err) { console.log(err); }
+	    console.log(stdout);
+	});
+
+    res.send(`delete ${req.query.num}`)
+});
+
+
+
 
 app.use('/image', express.static('python/image'));
 app.use('/location',express.static('local/location'));
